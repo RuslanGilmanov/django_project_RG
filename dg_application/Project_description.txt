@@ -1,0 +1,77 @@
+Project name: DjangoGramm
+
+Task:
+Write an application like Instagram. This application must have a web interface.
+The user can register on the website by email. After basic registration, the user will receive a confirmation
+of the continuation of registration. The email must have a unique link. The user who goes by a link should be redirected
+to the profile page and add his full name, bio, and avatar. Next, the user can use DjangoGramm.
+He can create posts with images, looks posts of other users via a feed of the latest posts. Unauthorized guests cannot
+view the profile and pictures of users.
+
+Additional functional requirements:
+- Each post may have multiple images
+- Each post may have multiple tags. New tags may be added by authors.
+- Users may like posts (and unlike as well)
+
+Proposed project directory structure:
+
+DjangoGramm/
+├── dg_application/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── templates/
+│   │   ├── layout.html
+│   │   ├── index.html
+│   │   ├── registration/
+│   │   │   └── register.html
+│   │   ├── login/
+│   │   │   └── login.html
+│   │   ├── users/
+│   │   │   └── profile.html
+│   │   └── posts/
+│   │       ├── posts_feed.html
+│   │       └── create_post.html
+│   └── static/
+│       ├── css/
+│       │   └── style.css
+│       └── media/
+│           ├── avatars/
+│           └── images/
+├── DjangoGramm/
+│   ├── __init__
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+└── sqlite3_database
+
+Brief description of modules' functionality:
+
+DjangoGramm/: This module represents the Django project itself.
+dg_application/: This module represents the main application of the DjangoGramm project.
+admin.py: is used to configure the administration interface, also known as the Django admin site.
+The main functionality of the admin.py file is to define the administration options for the models of an application.
+apps.py: This file includes the application configuration, such as the name of the application and its settings.
+models.py: This file defines models, representing the structure and relationships of the data in the database.
+tests.py: contains test cases for the application.
+urls.py: This file contains the URL routing configuration for the application, mapping URLs to corresponding views.
+views.py: This file includes the view functions that handle requests and return responses.
+templates/: This directory contains HTML templates.
+static/: This directory holds static files such as CSS stylesheets, images, and JavaScript files used by the application.
+
+DjangoGramm/: this module contains general settings for our application or all applications if the project includes several apps.
+asgi.py and wsgi.py: These files are used for running the Django application as an ASGI (Asynchronous Server Gateway Interface)
+or WSGI (Web Server Gateway Interface) application.
+settings.py: This file contains the project-level settings and configurations for the DjangoGramm project.
+urls.py: This file includes the project-level URL routing configuration, mapping URLs to the corresponding application URLs.
+
+manage.py: This is the Django management script used for various administrative tasks and running the development server.
+sqlite3_database: Project database
+
+The database relations diagram: DjangoGramm_db_diagram.png
