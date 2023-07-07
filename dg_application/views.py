@@ -59,6 +59,8 @@ def post_like(request, pk):
     post = get_object_or_404(Post.objects.prefetch_related('likes'), id=pk)
     if not post.likes.filter(id=request.user.id).exists():
         post.likes.add(request.user)
+        post.total_post_likes += 1
+        post.save()
     return HttpResponseRedirect(reverse('post-detail', args=[str(pk)]))
 
 
@@ -66,6 +68,8 @@ def post_unlike(request, pk):
     post = get_object_or_404(Post.objects.prefetch_related('likes'), id=pk)
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user)
+        post.total_post_likes -= 1
+        post.save()
     return HttpResponseRedirect(reverse('post-detail', args=[str(pk)]))
 
 

@@ -12,6 +12,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     tags = TaggableManager()
     likes = models.ManyToManyField(User, related_name='post_like')
+    total_post_likes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title

@@ -47,7 +47,7 @@
           {% else %}
           <a class="btn btn-outline-info" href="{% url 'login' %}?next={{ request.path }}">Log in to like this article!</a><br>
         {% endif %}
-        <strong class="text-secondary">{{ number_of_likes }} Like{{ number_of_likes|pluralize }}</strong>
+        <strong class="text-secondary">{{ post.total_post_likes }} Like{{ total_post_likes|pluralize }}</strong>
 
         <a class="mr-2 text-right float-right" href="{% url 'user-posts' post.author.username %}">See all posts of {{ post.author }}</a>
       </div>
