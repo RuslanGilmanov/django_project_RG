@@ -50,7 +50,6 @@ class PostDetailView(DetailView):
         liked = False
         if likes_connected.likes.filter(id=self.request.user.id).exists():
             liked = True
-        data['number_of_likes'] = likes_connected.number_of_likes()
         data['post_is_liked'] = liked
         return data
 
