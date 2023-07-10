@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import PostForm, ImageFormSet
 from taggit.models import Tag
+from django.db import transaction
 from django.views.generic import (ListView,
                                   DetailView,
                                   UpdateView,
@@ -54,8 +55,9 @@ class PostDetailView(DetailView):
         return data
 
 
+@transaction.atomic
 def post_like(request, pk):
-    post = get_object_or_404(Post.objects.prefetch_related('likes'), id=pk)
+    post = get_object_or_404(Post.objects.select_for_update(), id=pk)
     if not post.likes.filter(id=request.user.id).exists():
         post.likes.add(request.user)
         post.total_post_likes += 1
@@ -63,8 +65,9 @@ def post_like(request, pk):
     return HttpResponseRedirect(reverse('post-detail', args=[str(pk)]))
 
 
+@transaction.atomic
 def post_unlike(request, pk):
-    post = get_object_or_404(Post.objects.prefetch_related('likes'), id=pk)
+    post = get_object_or_404(Post.objects.select_for_update(), id=pk)
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user)
         post.total_post_likes -= 1
