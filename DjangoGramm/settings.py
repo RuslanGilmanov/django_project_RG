@@ -11,7 +11,20 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os.path
 from pathlib import Path
-from .config import EMAIL_PASSWORD, EMAIL_ADDRESS
+from .config import (
+    EMAIL_PASSWORD,
+    EMAIL_ADDRESS,
+    SECRET_KEY,
+    DATABASE_NAME,
+    DATABASE_USER,
+    DATABASE_PASS,
+    DATABASE_HOST,
+    DATABASE_PORT,
+    AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY,
+    AWS_STORAGE_BUCKET_NAME
+)
+from .backends import MediaRootS3Boto3Storage, StaticRootS3Boto3Storage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +34,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4&xo)xhje(ex_g53a+)-e$13@(tdom_8rpwo_4$ea$x+sc_cnt'
+SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -42,7 +55,8 @@ INSTALLED_APPS = [
     'users',
     'taggit',
     'crispy_forms',
-    "crispy_bootstrap5"
+    "crispy_bootstrap5",
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -81,8 +95,12 @@ WSGI_APPLICATION = 'DjangoGramm.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': DATABASE_NAME,
+        'USER': DATABASE_USER,
+        'PASSWORD': DATABASE_PASS,
+        'HOST': DATABASE_HOST,
+        'PORT': DATABASE_PORT,
     }
 }
 
@@ -121,10 +139,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 # Default primary key field type
@@ -149,3 +167,24 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 TAGGIT_CASE_INSENSITIVE = True
+
+AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY
+AWS_STORAGE_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.ap-southeast-2.amazonaws.com'
+
+S3_STATIC_DIR = "static"
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+
+PUBLIC_MEDIA_LOCATION = 'media'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+
+STATICFILES_STORAGE = 'DjangoGramm.backends.StaticRootS3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'DjangoGramm.backends.MediaRootS3Boto3Storage'
+
+AWS_DEFAULT_ACL = None
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_S3_REGION_NAME = 'ap-southeast-2'
+AWS_DEFAULT_ACL = 'public-read'
