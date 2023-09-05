@@ -37,9 +37,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -94,14 +94,10 @@ WSGI_APPLICATION = 'DjangoGramm.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DATABASE_NAME,
-        'USER': DATABASE_USER,
-        'PASSWORD': DATABASE_PASS,
-        'HOST': DATABASE_HOST,
-        'PORT': DATABASE_PORT,
-    }
+     "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
+        }
 }
 
 
@@ -168,23 +164,23 @@ EMAIL_USE_TLS = True
 
 TAGGIT_CASE_INSENSITIVE = True
 
-AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY
-AWS_STORAGE_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.ap-southeast-2.amazonaws.com'
-
-S3_STATIC_DIR = "static"
-STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
-
-PUBLIC_MEDIA_LOCATION = 'media'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-
-STATICFILES_STORAGE = 'DjangoGramm.backends.StaticRootS3Boto3Storage'
-DEFAULT_FILE_STORAGE = 'DjangoGramm.backends.MediaRootS3Boto3Storage'
-
-AWS_DEFAULT_ACL = None
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-
-AWS_S3_FILE_OVERWRITE = False
-AWS_S3_REGION_NAME = 'ap-southeast-2'
-AWS_DEFAULT_ACL = 'public-read'
+# AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID
+# AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY
+# AWS_STORAGE_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME
+# AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.ap-southeast-2.amazonaws.com'
+#
+# S3_STATIC_DIR = "static"
+# STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+#
+# PUBLIC_MEDIA_LOCATION = 'media'
+# MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+#
+# STATICFILES_STORAGE = 'DjangoGramm.backends.StaticRootS3Boto3Storage'
+# DEFAULT_FILE_STORAGE = 'DjangoGramm.backends.MediaRootS3Boto3Storage'
+#
+# AWS_DEFAULT_ACL = None
+# AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+#
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_S3_REGION_NAME = 'ap-southeast-2'
+# AWS_DEFAULT_ACL = 'public-read'

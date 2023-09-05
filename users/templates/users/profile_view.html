@@ -7,12 +7,33 @@
             <div class="media-body">
                 <div class="article-metadata">
                     <h2 class="account-heading">{{ user.username }}</h2>
-                    <small class="text-muted">Profile created: {{ user.profile.date_created|date:"d F, Y" }}</small>
+                    <div>
+                        <small class="text-muted">Profile created: {{ user.profile.date_created|date:"d F, Y" }}</small>
+                        <a class="text-muted mr-2 text-right float-right" href="{% url 'user_follows' user.username %}">Following: {{user.profile.follows.all.count }}
+                            Followed by: {{user.profile.followed_by.all.count }}</a>
+                    </div>
                 </div>
                 <p class="text-secondary">{{ user.email }}</p>
                 <p class="text-secondary">{{ user.profile.bio }}</p>
-                <a class="mr-2" href="{% url 'user-posts' user.username %}">See all posts of {{ user.username }}</a>
-            </div>
+
+                <!-- Follow -->
+                {% if user != logged_in_user %}
+                    {% if user.profile in logged_in_user.profile.follows.all %}
+                        <form method="post" action="{% url 'unfollow_user' user.username %}">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-info" type="submit">Unfollow</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{% url 'follow_user' user.username %}">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-info" type="submit">Follow</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+
+                <a class="mr-2 text-right float-right" href="{% url 'user-posts' user.username %}">See all posts of {{ user.username }}</a>
+
+                </div>
         </div>
     </div>
 {% endblock content %}

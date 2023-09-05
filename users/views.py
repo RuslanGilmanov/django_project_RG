@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from .models import Profile
 from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth import get_user_model
@@ -14,6 +14,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+
 
 
 def register(request):
@@ -87,3 +88,38 @@ class ProfileView(DetailView):
     def get_object(self, queryset=None):
         username = self.kwargs.get('username')
         return User.objects.get(username=username)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        logged_in_user = self.request.user
+        context['logged_in_user'] = logged_in_user
+
+        return context
+
+
+@login_required()
+def follow_user(request, username):
+    user_to_follow = get_object_or_404(User, username=username)
+    request.user.profile.follows.add(user_to_follow.profile)
+    request.user.profile.save()
+    return redirect('profile-view', username=username)
+
+
+@login_required()
+def unfollow_user(request, username):
+    user_to_unfollow = get_object_or_404(User, username=username)
+    request.user.profile.follows.remove(user_to_unfollow.profile)
+    request.user.profile.save()
+    return redirect('profile-view', username=username)
+
+
+@method_decorator(login_required, name='dispatch')
+class FollowsListView(ListView):
+
+    context_object_name = 'users'
+    template_name = 'users/follows_view.html'
+
+    def get_queryset(self):
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        return user.profile.follows.all()
