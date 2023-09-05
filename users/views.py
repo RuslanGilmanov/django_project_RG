@@ -122,4 +122,16 @@ class FollowsListView(ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return user.profile.follows.all()
+        followers = User.objects.filter(profile__follows=user.profile)
+        return followers
+
+# @login_required()
+# def follows_view(request, username):
+#     user = get_object_or_404(User, username=username) #user who we get the list of followers for
+#     followers = User.objects.filter(profile__follows=user.profile)
+#
+#     context = {
+#         "followers": followers,
+#         "user": user,
+#     }
+#     return render(request, 'users/follows_view.html', context)
